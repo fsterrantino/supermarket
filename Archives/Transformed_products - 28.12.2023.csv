@@ -1,0 +1,4 @@
+sku;Brand;Description;Final_price;Original_price;Discount;Regular_price;Regular_price_measure;Regular_price_un;timestamp
+999991;insert_test;Yerba Mate Playadito Suave X1kg;1979.87;3045.95;-35%;3045.95;1;kg;2023-12-27 14:41:54.478
+999992;insert_test;Galletitas Dulces Rellenas Con Crema Oreo 354g;1061.45;1633.0;-35%;4612.99;1;kg;2023-12-27 14:41:54.478
+999993;insert_test;Galletitas Dulces Con Chips De Chocolate Pepitos 357g;999.7;1538.0;-35%;4394.29;1;kg;2023-12-27 14:41:54.478
