@@ -1,10 +1,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from extract_aux_scripts.initiate_driver import initiate_driver
 
-driver, wait = initiate_driver()
-
-def safe_find_element(search_term, method):
+def safe_find_element(search_term, method, wait):
     try:
         match method:
             case 'id':

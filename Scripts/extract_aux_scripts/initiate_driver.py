@@ -7,12 +7,5 @@ def initiate_driver():
     wait = WebDriverWait(driver, 10)
 
     driver.maximize_window()
-    url = 'https://www.jumbo.com.ar/'
-
-    try:
-        driver.get(url)
-    except Exception as e:
-        print(f"Error: {e}")
-
-    time.sleep(5)
+    
     return driver, wait

@@ -5,7 +5,7 @@ from transform_aux_scripts.add_timestamp_column import add_timestamp_column
 
 current_date = datetime.now()
 formatted_date = current_date.strftime("%d.%m.%Y")
-# formatted_date = '08.12.2023'
+
 csv_name_input = '/Products - ' + formatted_date + '.csv'
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,25 +14,37 @@ target_folder = os.path.join(parent_dir, 'Archives')
 
 df = pd.read_csv(target_folder + csv_name_input, sep=';')
 
-df = df.dropna(subset=['description'])
+df = df.drop('id', axis=1)
 
-df['brand'] = df['brand'].str.replace('SIN MARCA', '')
-df['brand'] = df['brand'].fillna('SIN MARCA')
+df['brand'] = df['brand'].str.replace('SIN MARCA', 'NO BRAND')
+df['brand'] = df['brand'].fillna('NO BRAND')
+
+df['original_price'] = df['original_price'].fillna(df['final_price'])
+df['discount'] = df['discount'].fillna('0%')
+
+# Fromatting string like: 'Precio regular: $3.950 x kg.'
 
 df['regular_price'] = df['regular_price'].str.replace('Precio regular: $', '')
-df['regular_price'] = df['regular_price'].str.replace(' x ', ' ')
+# 3.950 x kg.
 
 expanded_precio_regular = df['regular_price'].str.split(' ', expand = True)
+# [3.950, x, kg.]
+
 df['regular_price'] = expanded_precio_regular[0]
+# 3.950
+
 expanded_precio_regular[2] = expanded_precio_regular[2].str.replace('.', '')
+expanded_precio_regular[3] = expanded_precio_regular[3].str.replace('.', '')
+# kg
 
-def format_regular_price_measure(row):
-    if row[2]:
-        return row[1], row[2]
+# [3.950, x, kg, None] or [1.200, x, 100, gr]
+def format_regular_price_measure_and_unit(row):
+    if row[3]:
+        return row[2], row[3]
     else:
-        return str(1), row[1]
+        return 1, row[2]
 
-df[['regular_price_measure', 'regular_price_un']] = expanded_precio_regular.apply(lambda row: pd.Series(format_regular_price_measure(row)), axis=1)
+df[['regular_price_measure', 'regular_price_un']] = expanded_precio_regular.apply(lambda row: pd.Series(format_regular_price_measure_and_unit(row)), axis=1)
 
 def format_price_columns(column):
     column = column.str.replace('$', '')
